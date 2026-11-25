@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Royal Parlor 3D Billiards</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <canvas id="billiards-canvas"></canvas>
+
+  <!-- Subtle vignette overlay -->
+  <div class="vignette"></div>
+
+  <!-- Top HUD Bar -->
+  <header class="hud-top">
+    <div class="hud-group brand-group">
+      <div class="brand-badge">
+        <span class="brand-ball">8</span>
+        <div>
+          <h1>Royal Parlor Billiards</h1>
+          <div class="status-line">
+            <span id="status-text">Aim &amp; drag back to shoot</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-pill">
+        <div class="stat">
+          <span class="stat-label">Shots</span>
+          <span id="shot-count" class="stat-value">0</span>
+        </div>
+        <div class="divider"></div>
+        <div class="stat">
+          <span class="stat-label">Remaining</span>
+          <span id="balls-left" class="stat-value">15</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hud-group controls-group">
+      <!-- Game Rack Selector -->
+      <div class="segmented" role="group" aria-label="Game Mode">
+        <button class="seg-btn active" data-mode="8ball" title="15-Ball Rack">8-Ball</button>
+        <button class="seg-btn" data-mode="9ball" title="9-Ball Diamond Rack">9-Ball</button>
+      </div>
+
+      <!-- Cloth Theme Dots -->
+      <div class="felt-picker" title="Table Cloth">
+        <button class="felt-dot active" data-felt="emerald" style="--dot:#166842" aria-label="Classic Emerald Felt"></button>
+        <button class="felt-dot" data-felt="tournament" style="--dot:#1b5b8c" aria-label="Tournament Blue Felt"></button>
+        <button class="felt-dot" data-felt="burgundy" style="--dot:#7a2130" aria-label="Royal Burgundy Felt"></button>
+      </div>
+
+      <!-- Aim Guide Toggle -->
+      <button id="btn-guide" class="icon-btn active" title="Toggle Aim Guide (G)">
+        <span class="btn-label">Aim Guide</span>
+      </button>
+
+      <!-- Sound Toggle -->
+      <button id="btn-sound" class="icon-btn active" title="Toggle Sound (M)">
+        <span id="sound-icon">🔊</span>
+      </button>
+
+      <!-- Reset Table Button -->
+      <button id="btn-reset" class="primary-btn" title="Reset & Re-Rack Table (R)">
+        ↺ Reset Table
+      </button>
+    </div>
+  </header>
+
+  <!-- Pocketed Balls Tray (Top-Right below header) -->
+  <aside class="pocketed-tray" aria-label="Pocketed Balls">
+    <div class="tray-header">
+      <span>Pocketed</span>
+      <span id="pocketed-count">0 / 15</span>
+    </div>
+    <div id="pocketed-list" class="tray-balls">
+      <span class="tray-empty">No balls sunk yet</span>
+    </div>
+  </aside>
+
+  <!-- Center Non-Blocking Toast -->
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <!-- Bottom-Left: Interactive Cue Ball Spin / English Widget -->
+  <section class="spin-widget" aria-label="Cue Ball Spin Control">
+    <div class="spin-header">
+      <span>Cue Spin</span>
+      <button id="btn-reset-spin" class="mini-link" title="Center Hit">Center</button>
+    </div>
+    <div id="spin-pad" class="spin-pad" title="Click or drag to apply Follow, Draw, or English">
+      <div class="spin-cross-h"></div>
+      <div class="spin-cross-v"></div>
+      <div id="spin-dot" class="spin-dot"></div>
+    </div>
+    <div id="spin-label" class="spin-label">Center (Stun)</div>
+  </section>
+
+  <!-- Bottom-Center: Power Bar & Camera Angle Controls -->
+  <footer class="hud-bottom">
+    <div id="power-panel" class="power-panel">
+      <div class="power-meta">
+        <span class="power-title">Shot Power</span>
+        <span id="power-pct" class="power-pct">0%</span>
+      </div>
+      <div class="power-track">
+        <div id="power-fill" class="power-fill"></div>
+      </div>
+      <div class="power-hint">Release to shoot · Drag back to 0% or press Esc to cancel</div>
+    </div>
+
+    <div class="camera-bar" role="group" aria-label="Camera Angles">
+      <button class="cam-btn active" data-cam="orbit" title="3D Orbit Perspective (1)">
+        <kbd>1</kbd> 3D Orbit
+      </button>
+      <button class="cam-btn" data-cam="cue" title="Low Cue Aiming View (2)">
+        <kbd>2</kbd> Cue View
+      </button>
+      <button class="cam-btn" data-cam="top" title="Overhead Top-Down View (3)">
+        <kbd>3</kbd> Top-Down
+      </button>
+      <button class="cam-btn" data-cam="corner" title="Cinematic Corner Broadcast (4)">
+        <kbd>4</kbd> Corner
+      </button>
+    </div>
+
+    <div class="controls-hint">
+      <span><strong>Aim:</strong> Move Mouse</span>
+      <span>·</span>
+      <span><strong>Shoot:</strong> Click &amp; Drag Back</span>
+      <span>·</span>
+      <span><strong>Orbit:</strong> Right-Drag</span>
+      <span>·</span>
+      <span><strong>Zoom:</strong> Scroll</span>
+      <span>·</span>
+      <span><strong>Fine Aim:</strong> ←/→</span>
+    </div>
+  </footer>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
